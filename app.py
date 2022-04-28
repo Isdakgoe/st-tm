@@ -110,10 +110,11 @@ class StreamlitTM:
             'Direction',
         ]
 
+        """
         for col in ["RelSpeed", "SpinRate", "RelHeight", "RelSide", "Extension", "InducedVertBreak", "HorzBreak",
-                    "ExitSpeed", "Angle", "Direction"]:
+            "ExitSpeed", "Angle", "Direction"]:
             self.db[col] = self.db[col].astype(int)
-
+        """
 
     def _db_setting(self):
         for bp in ["Pitcher", "Batter"]:
