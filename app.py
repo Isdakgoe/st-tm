@@ -17,7 +17,6 @@ def git_setting():
     """
 
 
-
 class StreamlitTM:
     def __init__(self):
         # setting streamlit
