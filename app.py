@@ -19,7 +19,7 @@ def git_setting():
     git push -u origin main
     """
 
-@st.cache(suppress_st_warning=True)
+
 class StreamlitTM:
     def __init__(self):
         # setting streamlit
@@ -49,9 +49,9 @@ class StreamlitTM:
 
         # values
         self.dic_team = {
+            "TOH_GOL": "楽天",
             "ORI_BUF": "オリックス",
             "CHI_MAR": "ロッテ",
-            "TOH_GOL": "楽天",
             "SOF_HAW": "ソフトバンク",
             "SAI_LIO": "西武",
             "HOK_FIG": "日本ハム",
@@ -78,7 +78,7 @@ class StreamlitTM:
         }
         self.teamEN_list = list(self.dic_team.keys())
 
-        self.dic_bp_EN = {bp: {teamEN: list(set(self.db.query(f'{bp}Team == @teamEN')[bp]))
+        self.dic_bp_EN = {bp: {teamEN: sorted(set(self.db.query(f'{bp}Team == @teamEN')[bp]))
                                for teamEN in self.teamEN_list} for bp in ["Batter", "Pitcher"]}
 
         self.col_table = [
@@ -109,23 +109,22 @@ class StreamlitTM:
         ]
 
     def _chose_pitcher(self, w_n, bp):
-        teamEN = self.wid_cols[w_n].selectbox(f"{bp}Team", self.teamEN_list, index=0)
+        teamEN = self.wid_cols[w_n].selectbox(f"{bp}Team", self.teamEN_list, index=w_n)
         Player = self.wid_cols[w_n+1].selectbox(bp, self.dic_bp_EN[bp][teamEN], index=0)
         return teamEN, Player
 
-    @st.cache(suppress_st_warning=True)
     def chose_extract_pitcher(self):
         self.PitcherTeam, self.Pitcher = self._chose_pitcher(w_n=0, bp="Pitcher")
 
-    @st.cache(suppress_st_warning=True)
     def chose_extract_batter(self):
         self.BatterTeam, self.Batter = self._chose_pitcher(w_n=2, bp="Batter")
 
     def fnc_show_table(self):
         self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
+        db_show = self.db.query(self.rule)
+
         self.btn_table_show = st.button("Show")
         if self.btn_table_show:
-            db_show = self.db.query(self.rule)
             num = db_show.shape[0]
             if num != 0:
                 st.write(db_show[self.col_table])
