@@ -43,7 +43,7 @@ class StreamlitTM:
         self.btn_table_show = st.button("Show")
 
     def fnc_show_table(self):
-        self.rule = "Pitcher == @self.Pitcher & Batter == @self.Batter"
+        self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
         st.write(self.rule)
 
         if self.btn_table_show:
