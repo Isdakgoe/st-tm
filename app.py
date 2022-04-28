@@ -55,7 +55,6 @@ class StreamlitTM:
             # "MIN_CAR": "広島",
             # "MIN_SWA": "ヤクルト",
         }
-        self.dic_team = {BP: sorted(set(self.db[f"{BP}Team"])) for BP in ["Pitcher", "Batter"]}
 
     def _chose_pitcher(self, w_n, BP):
         Team = self.wid_cols[w_n].selectbox(f"{BP}Team", list(self.dic_team.keys()), index=0)
