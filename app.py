@@ -23,7 +23,7 @@ class StreamlitTM:
 
         # read data
         path_db = 'templates/tm_2022_db.csv'
-        self.db = pd.read_csv(path_db, encoding="utf_8_sig")
+        self.db = pd.read_csv(path_db, encoding="utf-8-sig")
 
         # values
         self.dic_team = {BP: sorted(set(self.db[f"{BP}Team"])) for BP in ["Pitcher", "Batter"]}
