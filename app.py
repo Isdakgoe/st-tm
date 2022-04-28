@@ -137,6 +137,7 @@ class StreamlitTM:
         teamEN = self.wid_cols[w_n].selectbox(f"{bp}Team", ['all']+self.teamEN_list, index=0)
         if teamEN == "all":
             Player = "all"
+            self.Batter = "all"
 
         Player = self.wid_cols[w_n+1].selectbox(bp, ["all"]+self.dic_bp_EN[bp][teamEN], index=0)
         return teamEN, Player
