@@ -31,21 +31,8 @@ class StreamlitTM:
         self.ll.index = self.ll["NPB選手ID"]
         self.ll["nameTM"] = np.nan
 
-        path_db = 'templates/tm_2022_db.csv'
+        path_db = 'templates/tm_2022_db_3.csv'
         self.db = pd.read_csv(path_db, encoding="utf-8-sig")
-        for bp in ["Pitcher", "Batter"]:
-            # TrackMan
-            db_id = list(set(self.db[f"{bp}Id"]))
-            ind_use = list(set([v for v in db_id if "Unnamed" not in str(v)]))
-            self.db.query(f'{bp}Id in @ind_use', inplace=True)
-            self.db[f"{bp}Id"] = self.db[f"{bp}Id"].astype(int)
-
-            # LongList
-            id_NPB_list = list(set(self.db[f"{bp}Id"]))
-            id_NPB_list = [v for v in id_NPB_list if v in self.ll["NPB選手ID"]]
-            for id_NPB in id_NPB_list:
-                self.ll.loc[id_NPB, "nameTM"] = self.db.query(f'{bp}Id == @id_NPB')[f"{bp}Id"].values[0]
-        self.ll.dropna(subset=["nameTM"], inplace=True)
 
         # values
         self.dic_team = {
@@ -77,10 +64,8 @@ class StreamlitTM:
             # "MIN_SWA": "ヤクルト",
         }
         self.teamEN_list = list(self.dic_team.keys())
-
         self.dic_bp_EN = {bp: {teamEN: sorted(set(self.db.query(f'{bp}Team == @teamEN')[bp]))
                                for teamEN in self.teamEN_list} for bp in ["Batter", "Pitcher"]}
-
         self.col_table = [
             "Date",
             "Inning",
@@ -107,6 +92,23 @@ class StreamlitTM:
             # 'dis',
             # 'brzY',
         ]
+
+    def _db_setting(self):
+        for bp in ["Pitcher", "Batter"]:
+            # TrackMan
+            db_id = list(set(self.db[f"{bp}Id"]))
+            ind_use = list(set([v for v in db_id if "Unnamed" not in str(v)]))
+            self.db.query(f'{bp}Id in @ind_use', inplace=True)
+            self.db[f"{bp}Id"] = self.db[f"{bp}Id"].astype(int)
+
+            # LongList
+            id_NPB_list = list(set(self.db[f"{bp}Id"]))
+            id_NPB_list = [v for v in id_NPB_list if v in self.ll["NPB選手ID"]]
+            for id_NPB in id_NPB_list:
+                self.ll.loc[id_NPB, "nameTM"] = self.db.query(f'{bp}Id == @id_NPB')[f"{bp}Id"].values[0]
+        self.ll.dropna(subset=["nameTM"], inplace=True)
+
+        self.db.to_csv('templates/tm_2022_db_3.csv', encoding="utf_8_sig")
 
     def _chose_pitcher(self, w_n, bp):
         teamEN = self.wid_cols[w_n].selectbox(f"{bp}Team", self.teamEN_list, index=w_n)
