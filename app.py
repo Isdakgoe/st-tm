@@ -32,7 +32,7 @@ class StreamlitTM:
         Team = self.wid_cols[0].selectbox(f"{BP}Team", self.dic_team[BP], index=0)
         st.write(Team)
 
-        Players = self.db.query(f'{BP}Team == @Team')
+        Players = sorted(set(self.db.query(f'{BP}Team == @Team')[BP]))
         Player = self.wid_cols[1].selectbox(BP, Players, index=0)
 
         return Team, Player
