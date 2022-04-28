@@ -25,22 +25,27 @@ class StreamlitTM:
         path_db = 'templates/tm_2022_db.csv'
         self.db = pd.read_csv(path_db, encoding="utf_8_sig")
 
+        # values
+        self.PitcherTeams, self.BatterTeams = [sorted(set(self.db[v])) for v in ["PitcherTeam", "BatterTeam"]]
+
+    def _chose_pitcher(self, BP):
+        Team = self.wid_cols[0].selectbox("PitcherTeam", self.PitcherTeams, index=0)
+
+        Players = self.db.query(f'{BP}Team == @Team')
+        Player = self.wid_cols[1].selectbox("Pitcher", Players, index=0)
+        PlayerId = self.db.query('Pitcher == @Player')[f"{BP}Id"].values[0]
+
+        return Team, Player, PlayerId
+
     def chose_extract_player(self):
-        self.PitcherTeam = self._extract_values_to_chose_widget(w_No=0, col="PitcherTeam")
-        self.Pitcher = self._extract_values_to_chose_widget(w_No=1, col="Pitcher")
-        self.BatterTeam = self._extract_values_to_chose_widget(w_No=2, col="BatterTeam")
-        self.Batter = self._extract_values_to_chose_widget(w_No=3, col="Batter")
-
+        self.PitcherTeam, self.Pitcher, self.PitcherId = self._chose_pitcher(BP="Pitcher")
+        self.BatterTeam, self.Batter, self.BatterId = self._chose_pitcher(BP="Batter")
         self.btn_table_show = st.button("Show")
-
-    def _extract_values_to_chose_widget(self, w_No, col):
-        col_values_set = sorted(set(self.db[col]))
-        value_out = self.wid_cols[w_No].selectbox(col, col_values_set, index=0)
-        return value_out
 
     def fnc_show_table(self):
         self.rule = "Pitcher == @self.Pitcher & Batter == @self.Batter"
         st.write(self.rule)
+
         if self.btn_table_show:
             st.write(self.db.query(self.rule))
 
