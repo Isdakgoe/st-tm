@@ -112,9 +112,6 @@ class StreamlitTM:
 
         ]
 
-        for v in self.db.columns:
-            print(f"'{v}', ")
-
     def _db_setting(self):
         for bp in ["Pitcher", "Batter"]:
             # TrackMan
@@ -152,7 +149,7 @@ class StreamlitTM:
             num = db_show.shape[0]
             if num != 0:
                 st.write(str(num))
-                st.dataframe(db_show[self.col_table].style.highlight_max(axis=1))
+                st.dataframe(db_show[self.col_table])
                 st.table(db_show[self.col_table])
 
 
