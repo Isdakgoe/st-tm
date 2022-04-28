@@ -16,3 +16,4 @@ def git_setting():
 
 st.title("Visualizing Central Limit Theorem")
 git_setting()
+st.title("AAA")
