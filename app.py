@@ -14,20 +14,34 @@ def git_setting():
     # git remote add heroku https://git.heroku.com/st-tm.git
 
 
-st.title("Visualizing Central Limit Theorem")
+class StreamlitTM:
+    def __init__(self):
+        # setting streamlit
+        st.set_page_config(layout="wide")
+        st.title("Visualizing Central Limit Theorem")
+        self.wid_cols = st.beta_columns(3)
 
-path_db_summary = 'templates/DB_PitchType_NPB_2022.csv'
-db_summary = pd.read_csv(path_db_summary, encoding="utf-8-sig")
+        # read data
+        path_db_summary = 'templates/DB_PitchType_NPB_2022.csv'
+        self.db_summary = pd.read_csv(path_db_summary, encoding="utf-8-sig")
 
-wid_cols = st.beta_columns(3)
-PitcherTeam_list = sorted(set(db_summary["PlayerTeam"]))
-PlayerTeam = wid_cols[0].selectbox("PlayerTeam", PitcherTeam_list, index=0)
+    def chose_extract_player(self):
+        PitcherTeam_list = sorted(set(self.db_summary["PlayerTeam"]))
+        PlayerTeam = self.wid_cols[0].selectbox("PlayerTeam", PitcherTeam_list, index=0)
 
-Pitcher_list = sorted(set(db_summary.query('PlayerTeam == @PlayerTeam')["Player"]))
-Player = wid_cols[1].selectbox("Player", Pitcher_list, index=0)
+        Pitcher_list = sorted(set(self.db_summary.query('PlayerTeam == @PlayerTeam')["Player"]))
+        self.Player = self.wid_cols[1].selectbox("Player", Pitcher_list, index=0)
 
-btn_table_show = wid_cols[2].button("Show")
-if btn_table_show:
-    db_summary_show = db_summary.query('Player == @Player')
-    st.write(db_summary_show)
+        self.btn_table_show = self.wid_cols[2].button("Show")
 
+    def fnc_show_table(self):
+        if self.btn_table_show:
+            db_summary_show = self.db_summary.query('Player == @Player')
+            st.write(db_summary_show)
+
+
+self = StreamlitTM()
+self.chose_extract_player()
+self.fnc_show_table()
+
+# if __name__ == '__main__':
