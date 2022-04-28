@@ -30,6 +30,7 @@ class StreamlitTM:
 
     def _chose_pitcher(self, BP):
         Team = self.wid_cols[0].selectbox(f"{BP}Team", self.dic_team[BP], index=0)
+        st.write(Team)
 
         Players = self.db.query(f'{BP}Team == @Team')
         Player = self.wid_cols[1].selectbox(BP, Players, index=0)
