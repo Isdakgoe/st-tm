@@ -36,7 +36,7 @@ class StreamlitTM:
 
     def fnc_show_table(self):
         if self.btn_table_show:
-            db_summary_show = self.db_summary.query('Player == @Player')
+            db_summary_show = self.db_summary.query('Player == @self.Player')
             st.write(db_summary_show)
 
 
