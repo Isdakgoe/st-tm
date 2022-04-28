@@ -26,32 +26,56 @@ class StreamlitTM:
         self.db = pd.read_csv(path_db, encoding="utf-8-sig")
 
         # values
+        self.dic_team = {
+            "ORI_BUF": "オリックス",
+            "CHI_MAR": "ロッテ",
+            "TOH_GOL": "楽天",
+            "SOF_HAW": "ソフトバンク",
+            "SAI_LIO": "西武",
+            "HOK_FIG": "日本ハム",
+
+            "YOM_GIA": "巨人",
+            "HAN_TIG": "阪神",
+            "BAY_STA": "横浜",
+            "CHU_DRA": "中日",
+            "HIR_CAR": "広島",
+            "YAK_SWA": "ヤクルト",
+
+            # "MIN_BUF": "オリックス",
+            # "MIN_MAR": "ロッテ",
+            # "MIN_EAG": "楽天",
+            # "MIN_HAW": "ソフトバンク",
+            # "MIN_LIO": "西武",
+            # "MIN_FIG": "日本ハム",
+
+            # "MIN_GIA": "巨人",
+            # "MIN_TIG": "阪神",
+            # "MIN_BAY": "横浜",
+            # "MIN_DRA": "中日",
+            # "MIN_CAR": "広島",
+            # "MIN_SWA": "ヤクルト",
+        }
         self.dic_team = {BP: sorted(set(self.db[f"{BP}Team"])) for BP in ["Pitcher", "Batter"]}
 
-    def _chose_pitcher(self, BP):
-        Team = self.wid_cols[0].selectbox(f"{BP}Team", self.dic_team[BP], index=0)
-        st.write(Team)
-
+    def _chose_pitcher(self, w_n, BP):
+        Team = self.wid_cols[w_n].selectbox(f"{BP}Team", list(self.dic_team.keys()), index=0)
         Players = sorted(set(self.db.query(f'{BP}Team == @Team')[BP]))
-        Player = self.wid_cols[1].selectbox(BP, Players, index=0)
-
+        Player = self.wid_cols[w_n+1].selectbox(BP, Players, index=0)
         return Team, Player
 
     def chose_extract_player(self):
-        self.PitcherTeam, self.Pitcher = self._chose_pitcher(BP="Pitcher")
-        self.BatterTeam, self.Batter = self._chose_pitcher(BP="Batter")
+        self.PitcherTeam, self.Pitcher = self._chose_pitcher(w_n=0, BP="Pitcher")
+        self.BatterTeam, self.Batter = self._chose_pitcher(w_n=2, BP="Batter")
         self.btn_table_show = st.button("Show")
 
     def fnc_show_table(self):
         self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
         db_show = self.db.query(self.rule)
         num = db_show.shape[0]
-
-        st.write(self.rule)
         st.write(num)
 
         if self.btn_table_show & (num == 0):
-            st.write(num)
+            st.write(db_show)
 
 
 if __name__ == '__main__':
