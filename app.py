@@ -20,7 +20,7 @@ def git_setting():
     
     """
 
-
+@st.cache(suppress_st_warning=True)
 class StreamlitTM:
     def __init__(self):
         # setting streamlit
