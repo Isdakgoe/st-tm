@@ -73,7 +73,7 @@ class StreamlitTM:
         num = db_show.shape[0]
         st.write(num)
 
-        if self.btn_table_show & (num == 0):
+        if self.btn_table_show & (num != 0):
             st.write(db_show)
 
 
