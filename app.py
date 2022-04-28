@@ -129,6 +129,7 @@ class StreamlitTM:
         if self.btn_table_show:
             num = db_show.shape[0]
             if num != 0:
+                st.write(str(num))
                 st.write(db_show[self.col_table])
 
 
