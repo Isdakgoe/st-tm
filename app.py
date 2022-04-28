@@ -76,7 +76,6 @@ class StreamlitTM:
             'PitchCall',
             'PlayResult',
 
-
             # 'spdP',
             # 'SpinRate',
             # 'Tilt',
@@ -95,7 +94,7 @@ class StreamlitTM:
 
             'RelSpeed',
             'SpinRate',
-            'SpinAxis',
+            # 'SpinAxis',
             'Tilt',
             'RelHeight',
             'RelSide',
@@ -103,14 +102,18 @@ class StreamlitTM:
 
             'InducedVertBreak',
             'HorzBreak',
-            'PlateLocHeight',
-            'PlateLocSide',
+            # 'PlateLocHeight',
+            # 'PlateLocSide',
 
             'ExitSpeed',
             'Angle',
             'Direction',
-
         ]
+
+        for col in ["RelSpeed", "SpinRate", "RelHeight", "RelSide", "Extension", "InducedVertBreak", "HorzBreak",
+                    "ExitSpeed", "Angle", "Direction"]:
+            self.db[col] = self.db[col].astype(int)
+
 
     def _db_setting(self):
         for bp in ["Pitcher", "Batter"]:
