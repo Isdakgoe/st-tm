@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot
 import streamlit as st
 
+
 def git_setting():
     print("PUSHED")
     # git init
@@ -14,4 +15,4 @@ def git_setting():
 
 
 st.title("Visualizing Central Limit Theorem")
-
+git_setting()
