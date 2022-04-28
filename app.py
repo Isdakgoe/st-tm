@@ -138,8 +138,8 @@ class StreamlitTM:
         if teamEN == "all":
             Player = "all"
             self.Batter = "all"
-
-        Player = self.wid_cols[w_n+1].selectbox(bp, ["all"]+self.dic_bp_EN[bp][teamEN], index=0)
+        else:
+            Player = self.wid_cols[w_n+1].selectbox(bp, ["all"]+self.dic_bp_EN[bp][teamEN], index=0)
         return teamEN, Player
 
     def chose_extract_pitcher(self):
