@@ -15,5 +15,8 @@ def git_setting():
 
 
 st.title("Visualizing Central Limit Theorem")
-git_setting()
-st.title("AAA")
+
+path_db_summary = 'templates/DB_PitchType_NPB_2022.csv'
+db_summary = pd.read_csv(path_db_summary, encoding="cp932")
+st.write(db_summary)
+
