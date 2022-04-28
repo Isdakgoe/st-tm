@@ -8,8 +8,7 @@ def git_setting():
     print("PUSHED")
     """
     git init
-    gid add .
-    git add README.md
+    git add .
     git commit -m "first commit"
     git branch -M main
     git remote add origin https://github.com/Isdakgoe/st-tm.git
