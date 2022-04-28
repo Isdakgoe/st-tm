@@ -152,7 +152,7 @@ class StreamlitTM:
             num = db_show.shape[0]
             if num != 0:
                 st.write(str(num))
-                st.dataframe(db_show[self.col_table].style.highlight_max(axis=0))
+                st.dataframe(db_show[self.col_table].style.highlight_max(axis=1))
                 st.table(db_show[self.col_table])
 
 
