@@ -44,10 +44,14 @@ class StreamlitTM:
 
     def fnc_show_table(self):
         self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
-        st.write(self.rule)
+        db_show = self.db.query(self.rule)
+        num = db_show.shape[0]
 
-        if self.btn_table_show:
-            st.write(self.db.query(self.rule))
+        st.write(self.rule)
+        st.write(num)
+
+        if self.btn_table_show & (num == 0):
+            st.write(num)
 
 
 if __name__ == '__main__':
