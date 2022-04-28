@@ -32,8 +32,8 @@ class StreamlitTM:
         Team = self.wid_cols[0].selectbox("PitcherTeam", self.PitcherTeams, index=0)
 
         Players = self.db.query(f'{BP}Team == @Team')
-        Player = self.wid_cols[1].selectbox("Pitcher", Players, index=0)
-        PlayerId = self.db.query('Pitcher == @Player')[f"{BP}Id"].values[0]
+        Player = self.wid_cols[1].selectbox(BP, Players, index=0)
+        PlayerId = self.db.query(f'{BP} == @Player')[f"{BP}Id"].values[0]
 
         return Team, Player, PlayerId
 
