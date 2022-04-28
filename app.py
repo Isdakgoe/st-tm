@@ -38,8 +38,8 @@ class StreamlitTM:
         return Team, Player
 
     def chose_extract_player(self):
-        self.BatterTeam, self.Batter = self._chose_pitcher(BP="Batter")
         self.PitcherTeam, self.Pitcher = self._chose_pitcher(BP="Pitcher")
+        self.BatterTeam, self.Batter = self._chose_pitcher(BP="Batter")
         self.btn_table_show = st.button("Show")
 
     def fnc_show_table(self):
