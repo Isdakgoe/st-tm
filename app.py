@@ -17,7 +17,6 @@ def git_setting():
     git branch -M main
     git remote add origin https://github.com/Isdakgoe/st-tm.git
     git push -u origin main
-    
     """
 
 @st.cache(suppress_st_warning=True)
@@ -114,12 +113,16 @@ class StreamlitTM:
         Player = self.wid_cols[w_n+1].selectbox(bp, self.dic_bp_EN[bp][teamEN], index=0)
         return teamEN, Player
 
-    def chose_extract_player(self):
+    @st.cache(suppress_st_warning=True)
+    def chose_extract_pitcher(self):
         self.PitcherTeam, self.Pitcher = self._chose_pitcher(w_n=0, bp="Pitcher")
+
+    @st.cache(suppress_st_warning=True)
+    def chose_extract_batter(self):
         self.BatterTeam, self.Batter = self._chose_pitcher(w_n=2, bp="Batter")
-        self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
 
     def fnc_show_table(self):
+        self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
         self.btn_table_show = st.button("Show")
         if self.btn_table_show:
             db_show = self.db.query(self.rule)
@@ -131,7 +134,8 @@ class StreamlitTM:
 if __name__ == '__main__':
     st.set_page_config(layout="wide")
     self = StreamlitTM()
-    self.chose_extract_player()
+    self.chose_extract_pitcher()
+    self.chose_extract_batter()
     self.fnc_show_table()
 
 # streamlit run app.py
