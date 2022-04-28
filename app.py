@@ -22,7 +22,7 @@ db_summary = pd.read_csv(path_db_summary, encoding="utf-8-sig")
 PitcherTeam_list = sorted(set(db_summary["PlayerTeam"]))
 PlayerTeam = st.selectbox("PlayerTeam", PitcherTeam_list, index=0)
 
-Pitcher_list = set(db_summary.query('PlayerTeam == @PlayerTeam')["Pitcher"])
+Pitcher_list = sorted(set(db_summary.query('PlayerTeam == @PlayerTeam')["Player"]))
 Player = st.selectbox("Player", Pitcher_list, index=0)
 
 btn_table_show = st.button("Show")
