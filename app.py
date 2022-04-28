@@ -133,20 +133,27 @@ class StreamlitTM:
 
         self.db.to_csv('templates/tm_2022_db_3.csv', encoding="utf_8_sig")
 
-    def _chose_pitcher(self, w_n, bp):
-        teamEN = self.wid_cols[w_n].selectbox(f"{bp}Team", self.teamEN_list, index=w_n)
-        Player = self.wid_cols[w_n+1].selectbox(bp, self.dic_bp_EN[bp][teamEN], index=0)
+    def _chose_player(self, w_n, bp):
+        teamEN = self.wid_cols[w_n].selectbox(f"{bp}Team", ['all']+self.teamEN_list, index=0)
+        if teamEN == "all":
+            Player = "all"
+
+        Player = self.wid_cols[w_n+1].selectbox(bp, ["all"]+self.dic_bp_EN[bp][teamEN], index=0)
         return teamEN, Player
 
     def chose_extract_pitcher(self):
-        self.PitcherTeam, self.Pitcher = self._chose_pitcher(w_n=0, bp="Pitcher")
+        self.PitcherTeam, self.Pitcher = self._chose_player(w_n=0, bp="Pitcher")
 
     def chose_extract_batter(self):
-        self.BatterTeam, self.Batter = self._chose_pitcher(w_n=2, bp="Batter")
+        self.BatterTeam, self.Batter = self._chose_player(w_n=2, bp="Batter")
 
     def fnc_show_table(self):
-        self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
-        db_show = self.db.query(self.rule)
+        if self.Batter == "all":
+            db_show = self.db.copy()
+
+        else:
+            self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
+            db_show = self.db.query(self.rule)
 
         self.btn_table_show = st.button("Show")
         if self.btn_table_show:
@@ -154,13 +161,16 @@ class StreamlitTM:
             if num != 0:
                 st.write(str(num))
                 st.dataframe(db_show[self.col_table])
-                st.table(db_show[self.col_table])
+                # st.table(db_show[self.col_table])
 
 
 if __name__ == '__main__':
     st.set_page_config(layout="wide")
     self = StreamlitTM()
-    self.chose_extract_pitcher()
+    # self.chose_extract_pitcher()
+
+    self.Pitcher = "Busenitz, Alan"
+    self.db.query('Pitcher ==@self.Pitcher', inplace=True)
     self.chose_extract_batter()
     self.fnc_show_table()
 
