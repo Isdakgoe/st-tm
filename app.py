@@ -17,6 +17,7 @@ def git_setting():
     """
 
 
+@st.cache
 class StreamlitTM:
     def __init__(self):
         # setting streamlit
@@ -25,8 +26,8 @@ class StreamlitTM:
         self.wid_cols = st.beta_columns(4)
 
         # read data
-        path_db = 'templates/tm_csv_all_2022_NPB+NPM_update.pickle'
-        self.db = pd.read_pickle(path_db)
+        path_db = 'templates/tm_2022_db.csv'
+        self.db = pd.read_csv(path_db)
         for v in self.db.columns:
             print(f"'{v}', ")
 
@@ -93,7 +94,6 @@ class StreamlitTM:
         Player = self.wid_cols[w_n+1].selectbox(BP, Players, index=0)
         return Team, Player
 
-    @st.cache
     def chose_extract_player(self):
         self.PitcherTeam, self.Pitcher = self._chose_pitcher(w_n=0, BP="Pitcher")
         self.BatterTeam, self.Batter = self._chose_pitcher(w_n=2, BP="Batter")
