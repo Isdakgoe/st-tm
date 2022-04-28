@@ -29,7 +29,7 @@ class StreamlitTM:
         self.PitcherTeams, self.BatterTeams = [sorted(set(self.db[v])) for v in ["PitcherTeam", "BatterTeam"]]
 
     def _chose_pitcher(self, BP):
-        Team = self.wid_cols[0].selectbox("PitcherTeam", self.PitcherTeams, index=0)
+        Team = self.wid_cols[0].selectbox(f"{BP}Team", self.PitcherTeams, index=0)
 
         Players = self.db.query(f'{BP}Team == @Team')
         Player = self.wid_cols[1].selectbox(BP, Players, index=0)
@@ -38,8 +38,8 @@ class StreamlitTM:
         return Team, Player, PlayerId
 
     def chose_extract_player(self):
-        self.PitcherTeam, self.Pitcher, self.PitcherId = self._chose_pitcher(BP="Pitcher")
         self.BatterTeam, self.Batter, self.BatterId = self._chose_pitcher(BP="Batter")
+        self.PitcherTeam, self.Pitcher, self.PitcherId = self._chose_pitcher(BP="Pitcher")
         self.btn_table_show = st.button("Show")
 
     def fnc_show_table(self):
