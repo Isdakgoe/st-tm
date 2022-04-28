@@ -23,7 +23,7 @@ def git_setting():
 class StreamlitTM:
     def __init__(self):
         # setting streamlit
-        st.title("TrackMan DashBoard")
+        st.title("TrackMan DataBase")
         self.wid_cols = st.beta_columns(4)
 
         # read data
@@ -152,7 +152,8 @@ class StreamlitTM:
             num = db_show.shape[0]
             if num != 0:
                 st.write(str(num))
-                st.write(db_show[self.col_table])
+                st.dataframe(db_show[self.col_table].style.highlight_max(axis=0))
+                st.table(db_show[self.col_table])
 
 
 if __name__ == '__main__':
