@@ -110,6 +110,9 @@ class StreamlitTM:
             'Direction',
         ]
 
+        self.Pitchers = sorted(set(self.db["Pitcher"]))
+        self.Batters = sorted(set(self.db["Batter"]))
+
         """
         for col in ["RelSpeed", "SpinRate", "RelHeight", "RelSide", "Extension", "InducedVertBreak", "HorzBreak",
             "ExitSpeed", "Angle", "Direction"]:
@@ -143,24 +146,25 @@ class StreamlitTM:
         return teamEN, Player
 
     def chose_extract_pitcher(self):
-        self.PitcherTeam, self.Pitcher = self._chose_player(w_n=0, bp="Pitcher")
+        self.Pitcher = self.wid_cols[0].selectbox("Pitcher", ["all"] + self.Pitchers, index=0)
+        # self.PitcherTeam, self.Pitcher = self._chose_player(w_n=0, bp="Pitcher")
 
     def chose_extract_batter(self):
-        self.BatterTeam, self.Batter = self._chose_player(w_n=2, bp="Batter")
+        self.Batter = self.wid_cols[1].selectbox("Batter", ["all"] + self.Batters, index=0)
+        # self.BatterTeam, self.Batter = self._chose_player(w_n=2, bp="Batter")
 
     def fnc_show_table(self):
-        if self.Batter == "all":
-            db_show = self.db.copy()
-
-        else:
-            self.rule = f"Pitcher == @self.Pitcher & Batter == @self.Batter"
-            db_show = self.db.query(self.rule)
-
-        self.btn_table_show = st.button("Show")
         if self.btn_table_show:
+            # rule
+            rule_pit = "" if self.Pitcher == "all" else f'Pitcher == "{self.Pitcher}"'
+            rule_bat = "" if self.Batter == "all" else f'Batter == "{self.Batter}"'
+            rule = rule_pit + rule_bat
+            db_show = self.db.query(rule) if rule != "" else self.db.copy()
+
             num = db_show.shape[0]
+            st.write(str(num))
+
             if num != 0:
-                st.write(str(num))
                 st.dataframe(db_show[self.col_table])
                 # st.table(db_show[self.col_table])
 
@@ -170,9 +174,9 @@ if __name__ == '__main__':
     self = StreamlitTM()
     # self.chose_extract_pitcher()
 
-    self.Pitcher = "Busenitz, Alan"
-    self.db.query('Pitcher ==@self.Pitcher', inplace=True)
     self.chose_extract_batter()
+
+    self.btn_table_show = st.button("Show")
     self.fnc_show_table()
 
 # streamlit run app.py
