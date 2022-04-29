@@ -145,7 +145,6 @@ class StreamlitTM:
             Player = self.wid_cols[w_n+1].selectbox(bp, ["all"]+self.dic_bp_EN[bp][teamEN], index=0)
         return teamEN, Player
 
-    @st.cache(suppress_st_warning=True)
     def chose_extract_pitcher(self):
         self.Pitcher = self.wid_cols[0].selectbox("Pitcher", ["all"] + self.Pitchers, index=0)
         # self.PitcherTeam, self.Pitcher = self._chose_player(w_n=0, bp="Pitcher")
@@ -160,7 +159,7 @@ class StreamlitTM:
             rule_pit = "" if self.Pitcher == "all" else f'Pitcher == "{self.Pitcher}"'
             rule_bat = "" if self.Batter == "all" else f'Batter == "{self.Batter}"'
             rule = rule_pit + rule_bat
-            db_show = self.db.query(rule) if rule != "" else self.db.copy()
+            db_show = self.db[self.db["Pitcher"] == self.Pitcher & self.db["Batter"] == self.Batter] if rule != "" else self.db.copy()
 
             num = db_show.shape[0]
             st.write(str(num))
