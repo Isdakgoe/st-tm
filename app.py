@@ -174,6 +174,7 @@ if __name__ == '__main__':
     self = StreamlitTM()
     # self.chose_extract_pitcher()
 
+    self.chose_extract_pitcher()
     self.chose_extract_batter()
 
     self.btn_table_show = st.button("Show")
