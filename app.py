@@ -145,6 +145,7 @@ class StreamlitTM:
             Player = self.wid_cols[w_n+1].selectbox(bp, ["all"]+self.dic_bp_EN[bp][teamEN], index=0)
         return teamEN, Player
 
+    @st.cache(suppress_st_warning=True)
     def chose_extract_pitcher(self):
         self.Pitcher = self.wid_cols[0].selectbox("Pitcher", ["all"] + self.Pitchers, index=0)
         # self.PitcherTeam, self.Pitcher = self._chose_player(w_n=0, bp="Pitcher")
