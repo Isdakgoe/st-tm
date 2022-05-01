@@ -58,7 +58,7 @@ class StreamlitTM:
 
                        'all': ["全球種", '#000000', [".", "."]],
                        }  # 'Undefined', '#eeeeee', "h"],
-        self.pt_list = list(self.dic_pt.keys())
+        self.pt_list = list(self.dic_pt.keys())[:-2]
 
     def get_csv(self):
         # read data
@@ -121,6 +121,11 @@ class StreamlitTM:
         path_db = 'templates/TM_info_all_inning_ver6.csv'
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
         self.db.index = self.db["背番号#"] + " " + [v.split(', ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
+        self.db.fillna(1000000, inplace=True)
+        self.db.loc[:, self.col_table_EN[2:5]] = (self.db.loc[:, self.col_table_EN[2:5]] * 100).astype(int)
+        self.db.loc[:, self.col_table_EN[5:]] = (self.db.loc[:, self.col_table_EN[5:]]).astype(int)
+        self.db.replace({1000000: np.nan}, inplace=True)
+
         self.db.rename(columns=self.dic_table, inplace=True)
         self.PitcherTeams = list(self.dic_team.keys())
 
