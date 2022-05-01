@@ -88,14 +88,14 @@ class StreamlitTM:
             'str%': "STR%",
             'miss%': "MiSS%",
 
-            'relX_ave': 'RelH',
-            'relY_ave': 'RelS',
-            'relZ_ave': 'Ext',
-
             'spdP_ave': "SPD",
             'SpinRate_ave': "SPIN",
             'pitY_ave': "IVB",
             'pitX_ave': "HB",
+
+            'relX_ave': 'RelS',
+            'relY_ave': 'RelH',
+            'relZ_ave': 'Extension',
 
             # 'SpinAxis_ave': "MiSS%",
 
