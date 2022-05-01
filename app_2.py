@@ -44,6 +44,21 @@ class StreamlitTM:
             "HIR_CAR": "広島",
             "YAK_SWA": "ヤクルト",
         }
+        self.dic_pt = {'Fastball': ["ストレート", '#fbf401', ["o", "o"]],
+
+                       'Sinker': ["シンカー", '#00ff00', [">", "<"]],
+                       'Cutter': ["カット", '#cc6601', ["3", "4"]],
+                       'Slider': ["スライダー", '#ff99cc', ["<", ">"]],
+
+                       'Curveball': ["カーブ", '#ff0200', ["^", "^"]],
+                       'Splitter': ["フォーク", '#0700ff', [",", ","]],
+                       'ChangeUp': ["チェンジアップ", '#c0c0c0', ["D", "D"]],
+                       'Knuckleball': ["ナックル", '#eeeeee', ["*", "*"]],
+                       'Other': ["その他", '#eeeeee', ["h", "h"]],
+
+                       'all': ["全球種", '#000000', [".", "."]],
+                       }  # 'Undefined', '#eeeeee', "h"],
+        self.pt_list = list(self.dic_pt.keys())
 
     def get_csv(self):
         # read data
@@ -55,7 +70,8 @@ class StreamlitTM:
             'PitcherThrows',
             'PitcherTeam',
             'Pitcher',
-            'Inning',
+            'pt',
+            # 'Inning',
             # 'Date',
 
             # 'チーム',
@@ -65,12 +81,12 @@ class StreamlitTM:
             # 'pos2',
         ]
         self.dic_table = {
-            'num_pit': "NUM",
-            'num_fb': "NUM(FB)",
+            'num_all': "NUM",
+            'num': "NUM(FB)",
 
-            'rate_fb': "FB%",
-            'strike%_fb': "STR%",
-            'miss%_fb': "MiSS%",
+            'pt_rate': "pt%",
+            'str%': "STR%",
+            'miss%': "MiSS%",
 
             'spdP_ave': "SPD",
             'SpinRate_ave': "SPIN",
@@ -102,9 +118,8 @@ class StreamlitTM:
         self.col_table_EN = list(self.dic_table.keys())
         self.col_table_JP = list(self.dic_table.values())
 
-        path_db = 'templates/TM_info_all_inning_ver5.csv'
+        path_db = 'templates/TM_info_all_inning_ver6.csv'
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
-        self.db = self.db[self.db["Inning"] == "all"]
         self.db.index = self.db["背番号#"] + " " + [v.split(', ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
         self.db.rename(columns=self.dic_table, inplace=True)
         self.PitcherTeams = list(self.dic_team.keys())
@@ -115,16 +130,18 @@ class StreamlitTM:
         """
 
     def chose_pitcher_team(self):
-        PitcherTeam_show = self.PitcherTeams[:6]
-        self.PitcherTeam = st.multiselect("PitcherTeam", PitcherTeam_show, default=PitcherTeam_show)
+        self.PitcherTeam = st.multiselect("PitcherTeam", self.PitcherTeams[:6], default=self.PitcherTeams[:6])
 
-        self.LR_list = st.multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
+        self.LR_chosen = st.multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
+
+        self.pt_chosen = st.multiselect("TaggedPitchType", self.pt_list, default=self.pt_list)
 
     def show_table(self):
         df_show = self.db[self.db['PitcherTeam'].isin(self.PitcherTeam)]
-        df_show = df_show[df_show['PitcherThrows'].isin(self.LR_list)]
+        df_show = df_show[df_show['PitcherThrows'].isin(self.LR_chosen)]
+        df_show = df_show[df_show['pt'].isin(self.pt_chosen)]
 
-        comment = f"num-player = {df_show.shape[0]}"
+        comment = f"{df_show.shape[0]} data is at table below"
         st.write(comment)
 
         st.dataframe(data=df_show[self.col_table_JP], width=8000, height=450)
