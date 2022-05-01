@@ -155,7 +155,7 @@ class StreamlitTM:
 
     def show_table(self):
         df_show = self.db[self.db['チーム'].isin(self.PitcherTeamJP)]
-        df_show = df_show[df_show['PitcherThrows'].isin(self.LR_chosen)]
+        df_show = df_show[df_show['LR'].isin(self.LR_chosen)]
         df_show = df_show[df_show['pt'].isin(self.pt_chosen)]
 
         comment = f"{df_show.shape[0]} data is at table below"
