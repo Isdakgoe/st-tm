@@ -51,10 +51,11 @@ class StreamlitTM:
         self.ll.index = self.ll["NPB選手ID"]
         self.ll["nameTM"] = np.nan
 
-        path_db = 'templates/TM_info_all_inning_ver4.csv'
+        path_db = 'templates/TM_info_all_inning_ver5.csv'
 
         self.col_info = [
             'PitcherId',
+            'PitcherThrows',
             'PitcherTeam',
             'Pitcher',
             'Inning',
@@ -105,8 +106,12 @@ class StreamlitTM:
         self.db = self.db[self.db["Inning"] == "all"]
         self.db.index = self.db["Pitcher"]    # list(range(self.db.shape[0]))
         self.PitcherTeams = list(self.dic_team.keys())
-        # for v in self.db.columns:
-        #     print(f"'{v}', ")
+
+        """
+        for v in self.db.columns:
+            print(f"'{v}', ")
+        """
+
 
         # values
         self.teamEN_list = list(self.dic_team.keys())
@@ -115,8 +120,14 @@ class StreamlitTM:
     def chose_pitcher_team(self):
         PitcherTeam_show = self.PitcherTeams[:6]
         self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", PitcherTeam_show, default=PitcherTeam_show)
+
+        self.LR_list = self.wid_cols[1].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
+
+    def show_table(self):
         df_show = self.db[self.db['PitcherTeam'].isin(self.PitcherTeam)]
-        st.dataframe(data=df_show[self.col_table], width=8000, height=900)
+        df_show = df_show[df_show['PitcherThrows'].isin(self.LR_list)]
+
+        st.dataframe(data=df_show[self.col_table], width=8000, height=300)
 
 
 if __name__ == '__main__':
