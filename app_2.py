@@ -49,14 +49,13 @@ class StreamlitTM:
         # read data
         self.ll = pd.read_csv('templates/long_list_tm.csv', encoding="utf_8_sig")
         self.ll.index = self.ll["NPB選手ID"]
-        self.ll["nameTM"] = np.nan
 
         self.col_info = [
             'PitcherId',
             'PitcherThrows',
             'PitcherTeam',
             'Pitcher',
-            # 'Inning',
+            'Inning',
             # 'Date',
 
             # 'チーム',
@@ -100,24 +99,20 @@ class StreamlitTM:
             # 'relY_std',
             # 'relZ_std',
         }
-        self.col_table_JP = list(self.dic_table.keys())
+        self.col_table_EN = list(self.dic_table.keys())
         self.col_table_JP = list(self.dic_table.values())
 
         path_db = 'templates/TM_info_all_inning_ver5.csv'
-        self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_JP)
+        self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
         self.db = self.db[self.db["Inning"] == "all"]
         self.db.index = self.db["背番号#"] + " " + [v.split(' ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
-        self.db.columns = self.col_table_JP
+        self.db.columns = self.col_info + self.col_table_JP
         self.PitcherTeams = list(self.dic_team.keys())
 
         """
         for v in self.db.columns:
             print(f"'{v}', ")
         """
-
-        # values
-        self.teamEN_list = list(self.dic_team.keys())
-        self.Pitchers = sorted(set(self.db["Pitcher"]))
 
     def chose_pitcher_team(self):
         PitcherTeam_show = self.PitcherTeams[:6]
