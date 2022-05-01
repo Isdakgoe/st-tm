@@ -114,7 +114,6 @@ class StreamlitTM:
             print(f"'{v}', ")
         """
 
-    @st.cache(suppress_st_warning=True)
     def chose_pitcher_team(self):
         PitcherTeam_show = self.PitcherTeams[:6]
         self.PitcherTeam = st.multiselect("PitcherTeam", PitcherTeam_show, default=PitcherTeam_show)
