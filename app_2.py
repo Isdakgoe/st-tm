@@ -85,6 +85,7 @@ class StreamlitTM:
             'PitcherTeam': "Team",
             '背番号#': "#",
             'Pitcher': "Pitcher",
+            'pt': 'pt',
 
             'num_all': "NUM",
             'num': "NUM(FB)",
@@ -127,14 +128,15 @@ class StreamlitTM:
 
         path_db = 'templates/TM_info_all_inning_ver6.csv'
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
+        self.db["Pitcher"] = [v.split(', ')[0] for v in self.db["Pitcher"]]
         # self.db.index = [f"[" + v.split('_')[0] + "] " for v in self.db["PitcherTeam"]] \
         #                 + self.db["背番号#"] + " " + self.db["Pitcher"]
 
         v_replace = 100000
         self.db.fillna(v_replace, inplace=True)
-        self.db.loc[:, self.col_table_EN[6:9]] = (self.db.loc[:, self.col_table_EN[6:9]] * 100).astype(int)
-        self.db.loc[:, self.col_table_EN[9:13]] = (self.db.loc[:, self.col_table_EN[8:13]]).astype(int)
-        self.db.loc[:, self.col_table_EN[13:]] = (self.db.loc[:, self.col_table_EN[12:]] * 100).astype(int)
+        self.db.loc[:, self.col_table_EN[7:10]] = (self.db.loc[:, self.col_table_EN[7:10]] * 100).astype(int)
+        self.db.loc[:, self.col_table_EN[10:14]] = (self.db.loc[:, self.col_table_EN[10:14]]).astype(int)
+        self.db.loc[:, self.col_table_EN[14:]] = (self.db.loc[:, self.col_table_EN[14:]] * 100).astype(int)
         self.db.replace({v_replace: np.nan, v_replace*100: np.nan}, inplace=True)
 
         self.db.rename(columns=self.dic_table, inplace=True)
