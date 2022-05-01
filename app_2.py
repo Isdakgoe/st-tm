@@ -28,6 +28,23 @@ class StreamlitTM:
         st.title("TrackMan DataBase")
         self.wid_cols = st.beta_columns(4)
 
+        # parameters
+        self.dic_team = {
+            "TOH_GOL": "楽天",
+            "ORI_BUF": "オリックス",
+            "CHI_MAR": "ロッテ",
+            "SOF_HAW": "ソフトバンク",
+            "SAI_LIO": "西武",
+            "HOK_FIG": "日本ハム",
+
+            "YOM_GIA": "巨人",
+            "HAN_TIG": "阪神",
+            "BAY_STA": "横浜",
+            "CHU_DRA": "中日",
+            "HIR_CAR": "広島",
+            "YAK_SWA": "ヤクルト",
+        }
+
     def get_csv(self):
         # read data
         self.ll = pd.read_csv('templates/long_list_tm.csv', encoding="utf_8_sig")
@@ -58,14 +75,14 @@ class StreamlitTM:
             'pitY_ave',
             'pitX_ave',
             'SpinAxis_ave',
-            'relX_ave',
-            'relY_ave',
-            'relZ_ave',
+            # 'relX_ave',
+            # 'relY_ave',
+            # 'relZ_ave',
 
-            # 'spdP_max',
-            # 'SpinRate_max',
-            # 'pitY_max',
-            # 'pitX_max',
+            'spdP_max',
+            'SpinRate_max',
+            'pitY_max',
+            'pitX_max',
             # 'SpinAxis_max',
             # 'relX_max',
             # 'relY_max',
@@ -86,29 +103,26 @@ class StreamlitTM:
         ]
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table)
         self.db = self.db[self.db["Inning"] == "all"]
-        self.db.index = list(range(self.db.shape[0]))
+        self.db.index = self.db["Pitcher"]    # list(range(self.db.shape[0]))
+        self.PitcherTeams = list(self.dic_team.keys())
         # for v in self.db.columns:
         #     print(f"'{v}', ")
-        st.dataframe(self.db[self.col_table], 1000, 1000)
 
         # values
-        self.dic_team = {
-            "TOH_GOL": "楽天",
-            "ORI_BUF": "オリックス",
-            "CHI_MAR": "ロッテ",
-            "SOF_HAW": "ソフトバンク",
-            "SAI_LIO": "西武",
-            "HOK_FIG": "日本ハム",
-
-            "YOM_GIA": "巨人",
-            "HAN_TIG": "阪神",
-            "BAY_STA": "横浜",
-            "CHU_DRA": "中日",
-            "HIR_CAR": "広島",
-            "YAK_SWA": "ヤクルト",
-        }
         self.teamEN_list = list(self.dic_team.keys())
         self.Pitchers = sorted(set(self.db["Pitcher"]))
+
+    def chose_pitcher_team(self):
+        self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", ["all"] + self.PitcherTeams[:6])
+        if self.PitcherTeam == "all":
+            df_show = self.db
+        else:
+            df_show = self.db[self.db["PitcherTeam"] == self.PitcherTeam]
+
+        st.dataframe(df_show[self.col_table].style.highlight_max(axis=0), 1000, 1000)
+
+
+
 
 
 if __name__ == '__main__':
