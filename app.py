@@ -1,4 +1,5 @@
 
+from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot
 import streamlit as st
@@ -22,50 +23,7 @@ def git_setting():
 
 class StreamlitTM:
     def __init__(self):
-        # setting streamlit
-        st.title("TrackMan DataBase")
-        self.wid_cols = st.beta_columns(4)
-
-        # read data
-        self.ll = pd.read_csv('templates/long_list_tm.csv', encoding="utf_8_sig")
-        self.ll.index = self.ll["NPB選手ID"]
-        self.ll["nameTM"] = np.nan
-
-        path_db = 'templates/tm_2022_db_3.csv'
-        self.db = pd.read_csv(path_db, encoding="utf-8-sig")
-
-        # values
-        self.dic_team = {
-            "TOH_GOL": "楽天",
-            "ORI_BUF": "オリックス",
-            "CHI_MAR": "ロッテ",
-            "SOF_HAW": "ソフトバンク",
-            "SAI_LIO": "西武",
-            "HOK_FIG": "日本ハム",
-
-            "YOM_GIA": "巨人",
-            "HAN_TIG": "阪神",
-            "BAY_STA": "横浜",
-            "CHU_DRA": "中日",
-            "HIR_CAR": "広島",
-            "YAK_SWA": "ヤクルト",
-            # "MIN_BUF": "オリックス",
-            # "MIN_MAR": "ロッテ",
-            # "MIN_EAG": "楽天",
-            # "MIN_HAW": "ソフトバンク",
-            # "MIN_LIO": "西武",
-            # "MIN_FIG": "日本ハム",
-
-            # "MIN_GIA": "巨人",
-            # "MIN_TIG": "阪神",
-            # "MIN_BAY": "横浜",
-            # "MIN_DRA": "中日",
-            # "MIN_CAR": "広島",
-            # "MIN_SWA": "ヤクルト",
-        }
-        self.teamEN_list = list(self.dic_team.keys())
-        self.dic_bp_EN = {bp: {teamEN: sorted(set(self.db.query(f'{bp}Team == @teamEN')[bp]))
-                               for teamEN in self.teamEN_list} for bp in ["Batter", "Pitcher"]}
+        # parameters: steady
         self.col_table = [
             "Date",
             "Inning",
@@ -110,6 +68,59 @@ class StreamlitTM:
             'Direction',
         ]
 
+        # setting streamlit
+        st.title("TrackMan DataBase")
+        self.wid_cols = st.beta_columns(4)
+
+        # read data
+        self.ll = pd.read_csv('templates/long_list_tm.csv', encoding="utf_8_sig")
+        self.ll.index = self.ll["NPB選手ID"]
+        self.ll["nameTM"] = np.nan
+
+        path_db = 'templates/tm_2022_db_3.csv'
+        usecols = self.col_table + ["PitcherId", "PitcherTeam", "Pitcher"] + ["BatterId", "BatterTeam", "Batter"]
+
+        self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=usecols, dtype={"RelSide": float})
+        for v in self.db.columns:
+            dtype = self.db[v].dtype
+            print(v, dtype) #  if str(dtype) == "object" else None
+
+        for v in sorted(set(self.db["Date"])):
+            print(v)
+
+        # values
+        self.dic_team = {
+            "TOH_GOL": "楽天",
+            "ORI_BUF": "オリックス",
+            "CHI_MAR": "ロッテ",
+            "SOF_HAW": "ソフトバンク",
+            "SAI_LIO": "西武",
+            "HOK_FIG": "日本ハム",
+
+            "YOM_GIA": "巨人",
+            "HAN_TIG": "阪神",
+            "BAY_STA": "横浜",
+            "CHU_DRA": "中日",
+            "HIR_CAR": "広島",
+            "YAK_SWA": "ヤクルト",
+            # "MIN_BUF": "オリックス",
+            # "MIN_MAR": "ロッテ",
+            # "MIN_EAG": "楽天",
+            # "MIN_HAW": "ソフトバンク",
+            # "MIN_LIO": "西武",
+            # "MIN_FIG": "日本ハム",
+
+            # "MIN_GIA": "巨人",
+            # "MIN_TIG": "阪神",
+            # "MIN_BAY": "横浜",
+            # "MIN_DRA": "中日",
+            # "MIN_CAR": "広島",
+            # "MIN_SWA": "ヤクルト",
+        }
+        self.teamEN_list = list(self.dic_team.keys())
+        self.dic_bp_EN = {bp: {teamEN: sorted(set(self.db.query(f'{bp}Team == @teamEN')[bp]))
+                               for teamEN in self.teamEN_list} for bp in ["Batter", "Pitcher"]}
+
         self.Pitchers = sorted(set(self.db["Pitcher"]))
         self.Batters = sorted(set(self.db["Batter"]))
 
@@ -146,27 +157,34 @@ class StreamlitTM:
         return teamEN, Player
 
     def chose_extract_pitcher(self):
-        self.Pitcher = self.wid_cols[0].selectbox("Pitcher", ["all"] + self.Pitchers, index=0)
+        self.Pitcher = self.wid_cols[0].selectbox("Pitcher", ["all"] + self.Pitchers, index=1)
         # self.PitcherTeam, self.Pitcher = self._chose_player(w_n=0, bp="Pitcher")
 
     def chose_extract_batter(self):
-        self.Batter = self.wid_cols[1].selectbox("Batter", ["all"] + self.Batters, index=0)
+        self.Batter = self.wid_cols[1].selectbox("Batter", ["all"] + self.Batters, index=1)
         # self.BatterTeam, self.Batter = self._chose_player(w_n=2, bp="Batter")
 
+    def search_rule(self):
+        if self.Pitcher == self.Batter == "all":
+            st.error('Pitcher and Batter are "all", and please change either one')
+            return False
+
+        else:
+            if self.Pitcher == "all":
+                self.db_show = self.db[self.db["Batter"] == self.Batter]
+
+            elif self.Batter == "all":
+                self.db_show = self.db[self.db["Pitcher"] == self.Pitcher]
+
+            else:
+                self.db_show = self.db[(self.db["Pitcher"] == self.Pitcher) & (self.db["Batter"] == self.Batter)]
+
+            num = str(self.db_show.shape[0])
+            st.write(f"num of pitch = {num}")
+            return True
+
     def fnc_show_table(self):
-        if self.btn_table_show:
-            # rule
-            rule_pit = "" if self.Pitcher == "all" else f'Pitcher == "{self.Pitcher}"'
-            rule_bat = "" if self.Batter == "all" else f'Batter == "{self.Batter}"'
-            rule = rule_pit + rule_bat
-            db_show = self.db[self.db["Pitcher"] == self.Pitcher & self.db["Batter"] == self.Batter] if rule != "" else self.db.copy()
-
-            num = db_show.shape[0]
-            st.write(str(num))
-
-            if num != 0:
-                st.dataframe(db_show[self.col_table])
-                # st.table(db_show[self.col_table])
+        st.dataframe(self.db_show[self.col_table])
 
 
 if __name__ == '__main__':
