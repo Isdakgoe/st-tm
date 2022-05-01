@@ -68,8 +68,8 @@ class StreamlitTM:
             'num_pit': "NUM",
             'num_fb': "NUM(FB)",
 
-            'rate_fb': "MiSS%",
-            'strike%_fb': "MiSS%",
+            'rate_fb': "FB%",
+            'strike%_fb': "STR%",
             'miss%_fb': "MiSS%",
 
             'spdP_ave': "SPD",
@@ -81,10 +81,10 @@ class StreamlitTM:
             # 'relY_ave',
             # 'relZ_ave',
 
-            'spdP_max': "SPD(MAX)",
-            'SpinRate_max': "SPIN(MAX)",
-            'pitY_max': "IVB(MAX)",
-            'pitX_max': "HB(MAX)",
+            'spdP_max': "SPD\n(MAX)",
+            'SpinRate_max': "SPIN\n(MAX)",
+            'pitY_max': "IVB\n(MAX)",
+            'pitX_max': "HB\n(MAX)",
             # 'SpinAxis_max',
             # 'relX_max',
             # 'relY_max',
