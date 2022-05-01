@@ -92,15 +92,17 @@ class StreamlitTM:
             'SpinRate_ave': "SPIN",
             'pitY_ave': "IVB",
             'pitX_ave': "HB",
-            # 'SpinAxis_ave': "MiSS%",
-            # 'relX_ave',
-            # 'relY_ave',
-            # 'relZ_ave',
 
-            'spdP_max': "SPD\n(MAX)",
-            'SpinRate_max': "SPIN\n(MAX)",
-            'pitY_max': "IVB\n(MAX)",
-            'pitX_max': "HB\n(MAX)",
+            # 'SpinAxis_ave': "MiSS%",
+
+            'relX_ave': 'RelH',
+            'relY_ave': 'RelS',
+            'relZ_ave': 'Ext',
+
+            # 'spdP_max': "SPD\n(MAX)",
+            # 'SpinRate_max': "SPIN\n(MAX)",
+            # 'pitY_max': "IVB\n(MAX)",
+            # 'pitX_max': "HB\n(MAX)",
             # 'SpinAxis_max',
             # 'relX_max',
             # 'relY_max',
@@ -138,11 +140,11 @@ class StreamlitTM:
         """
 
     def chose_pitcher_team(self):
-        self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
+        self.PitcherTeam = st.multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
 
-        self.LR_chosen = self.wid_cols[1].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
+        self.LR_chosen = self.wid_cols[0].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
 
-        self.pt_chosen = self.wid_cols[2].multiselect("TaggedPitchType", self.pt_list, default=self.pt_list[0])
+        self.pt_chosen = self.wid_cols[1].multiselect("TaggedPitchType", self.pt_list, default=self.pt_list[0])
 
     def show_table(self):
         df_show = self.db[self.db['PitcherTeam'].isin(self.PitcherTeam)]
