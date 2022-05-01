@@ -27,20 +27,6 @@ class StreamlitTM:
         st.set_page_config(layout="wide")
         st.title("TrackMan DataBase")
 
-        # comment
-        with st.beta_expander("See explanation"):
-            st.write("STR: StrikeCalled + StrikeSwinging + FoulBall + InPlay")
-            st.write("STR%: STR / NUM(pt)")
-            st.write("MISS%: StrikeSwinging / STR")
-            st.write("IVB: Induced Vertical Break (縦変化量) [cm]")
-            st.write("HB: Horizontal Break (横変化量) [cm]")
-            st.write("RelH: Release Side [cm]")
-            st.write("RelS: Release Height [cm]")
-            st.write("Ext: Extension [cm]")
-
-        # set widgets
-        self.wid_cols = st.beta_columns(3)
-
         # parameters
         self.dic_team = {
             "TOH_GOL": "楽天",
@@ -57,6 +43,8 @@ class StreamlitTM:
             "HIR_CAR": "広島",
             "YAK_SWA": "ヤクルト",
         }
+        self.PitcherTeams = list(self.dic_team.keys())
+
         self.dic_pt = {'Fastball': ["ストレート", '#fbf401', ["o", "o"]],
 
                        'Sinker': ["シンカー", '#00ff00', [">", "<"]],
@@ -73,12 +61,42 @@ class StreamlitTM:
                        }  # 'Undefined', '#eeeeee', "h"],
         self.pt_list = list(self.dic_pt.keys())[:-2]
 
-
-    def get_csv(self):
-        # read data
+        # long_list
         self.ll = pd.read_csv('templates/long_list_tm.csv', encoding="utf_8_sig")
         self.ll.index = self.ll["NPB選手ID"]
 
+        # start
+        page_list = ["Pitcher-Summary", "Batter-Summary"]
+        self.page = st.sidebar.radio("Page", page_list, index=1)
+        if self.page == page_list[0]:
+            self.page_PS()
+        else:
+            st.error("NON PAGE")
+
+    # PS: Pitcher Summary
+    def page_PS(self):
+        # comment
+        with st.beta_expander("See explanation"):
+            st.write("STR: StrikeCalled + StrikeSwinging + FoulBall + InPlay")
+            st.write("STR%: STR / NUM(pt)")
+            st.write("MISS%: StrikeSwinging / STR")
+            st.write("IVB: Induced Vertical Break (縦変化量) [cm]")
+            st.write("HB: Horizontal Break (横変化量) [cm]")
+            st.write("RelH: Release Side [cm]")
+            st.write("RelS: Release Height [cm]")
+            st.write("Ext: Extension [cm]")
+        st.write("\n")
+
+        # set widgets
+        self.wid_cols = st.beta_columns(3)
+
+        # start
+        self.get_csv_PS()
+        self.extract_values_PS()
+        self.show_table_PS()
+
+    def get_csv_PS(self):
+        # set parameters
         self.col_info = [
             'PitcherId',
             'PitcherThrows',
@@ -140,9 +158,10 @@ class StreamlitTM:
         self.col_table_EN = list(self.dic_table.keys())
         self.col_table_JP = list(self.dic_table.values())
 
+        # read data
         path_db = 'templates/TM_info_all_inning_ver6.csv'
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
-        self.db["Pitcher"] = [v.split(', ')[0] for v in self.db["Pitcher"]]
+        # self.db["Pitcher"] = [v.split(', ')[0] for v in self.db["Pitcher"]]
         # self.db.index = [f"[" + v.split('_')[0] + "] " for v in self.db["PitcherTeam"]] \
         #                 + self.db["背番号#"] + " " + self.db["Pitcher"]
 
@@ -152,26 +171,22 @@ class StreamlitTM:
         self.db.loc[:, self.col_table_EN[10:14]] = (self.db.loc[:, self.col_table_EN[10:14]]).astype(int)
         self.db.loc[:, self.col_table_EN[14:]] = (self.db.loc[:, self.col_table_EN[14:]] * 100).astype(int)
         self.db.replace({v_replace: np.nan, v_replace*100: np.nan}, inplace=True)
-
         self.db.rename(columns=self.dic_table, inplace=True)
-        self.PitcherTeams = list(self.dic_team.keys())
 
         """
         for v in self.db.columns:
             print(f"'{v}', ")
         """
 
-    def chose_pitcher_team(self):
-        self.PitcherTeamEN = self.wid_cols[0].multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
+    def extract_values_PS(self):
+        self.PitcherTeamEN = self.wid_cols[0].multiselect("■ PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
         self.PitcherTeamJP = [self.dic_team[v] for v in self.PitcherTeamEN]
 
         self.LR_chosen = self.wid_cols[1].multiselect("■ PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
-
         self.pt_chosen = self.wid_cols[2].multiselect("■ TaggedPitchType", self.pt_list, default=self.pt_list[0])
-
         self.col_show = st.multiselect("■ Columns which shows at table below", self.col_table_JP, default=self.col_table_JP)
 
-    def show_table(self):
+    def show_table_PS(self):
         df_show = self.db[self.db['チーム'].isin(self.PitcherTeamJP)]
         df_show = df_show[df_show['LR'].isin(self.LR_chosen)]
         df_show = df_show[df_show['pt'].isin(self.pt_chosen)]
@@ -184,7 +199,5 @@ class StreamlitTM:
 
 if __name__ == '__main__':
     self = StreamlitTM()
-    self.get_csv()
-    self.chose_pitcher_team()
-    self.show_table()
+
 
