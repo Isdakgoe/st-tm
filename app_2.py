@@ -102,6 +102,7 @@ class StreamlitTM:
         self.col_table_EN = list(self.dic_table.keys())
         self.col_table_JP = list(self.dic_table.values())
 
+
         path_db = 'templates/TM_info_all_inning_ver5.csv'
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
         self.db = self.db[self.db["Inning"] == "all"]
