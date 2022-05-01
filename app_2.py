@@ -116,7 +116,7 @@ class StreamlitTM:
         PitcherTeam_show = self.PitcherTeams[:6]
         self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", PitcherTeam_show, default=PitcherTeam_show)
         df_show = self.db[self.db['PitcherTeam'].isin(self.PitcherTeam)]
-        st.dataframe(df_show[self.col_table].style.highlight_max(axis=0))
+        st.dataframe(df_show[self.col_table].style.highlight_max(axis=0), width=8000, height=900)
 
 
 if __name__ == '__main__':
