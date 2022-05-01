@@ -113,7 +113,8 @@ class StreamlitTM:
         self.Pitchers = sorted(set(self.db["Pitcher"]))
 
     def chose_pitcher_team(self):
-        self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", ["all"] + self.PitcherTeams[:6])
+        PitcherTeam_show = ["all"] + self.PitcherTeams[:6]
+        self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", PitcherTeam_show, default=PitcherTeam_show)
         if self.PitcherTeam == "all":
             df_show = self.db
         else:
