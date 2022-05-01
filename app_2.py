@@ -100,7 +100,7 @@ class StreamlitTM:
 
             'relX_ave': 'RelS',
             'relY_ave': 'RelH',
-            'relZ_ave': 'Extension',
+            'relZ_ave': 'Ext',
 
             # 'SpinAxis_ave': "MiSS%",
 
@@ -132,8 +132,8 @@ class StreamlitTM:
 
         v_replace = 100000
         self.db.fillna(v_replace, inplace=True)
-        self.db.loc[:, self.col_table_EN[6:9]] = (self.db.loc[:, self.col_table_EN[6:9]] * 100).astype(int)
-        self.db.loc[:, self.col_table_EN[9:12]] = (self.db.loc[:, self.col_table_EN[9:12]]).astype(int)
+        self.db.loc[:, self.col_table_EN[6:8]] = (self.db.loc[:, self.col_table_EN[6:8]] * 100).astype(int)
+        self.db.loc[:, self.col_table_EN[8:12]] = (self.db.loc[:, self.col_table_EN[8:12]]).astype(int)
         self.db.loc[:, self.col_table_EN[12:]] = (self.db.loc[:, self.col_table_EN[12:]] * 100).astype(int)
         self.db.replace({v_replace: np.nan, v_replace*100: np.nan}, inplace=True)
 
