@@ -104,7 +104,7 @@ class StreamlitTM:
         ]
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table)
         self.db = self.db[self.db["Inning"] == "all"]
-        self.db.index = self.db["Pitcher"]    # list(range(self.db.shape[0]))
+        self.db.index = self.db["背番号#"] + " " + [v.split(' ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
         self.PitcherTeams = list(self.dic_team.keys())
 
         """
@@ -112,22 +112,24 @@ class StreamlitTM:
             print(f"'{v}', ")
         """
 
-
         # values
         self.teamEN_list = list(self.dic_team.keys())
         self.Pitchers = sorted(set(self.db["Pitcher"]))
 
     def chose_pitcher_team(self):
         PitcherTeam_show = self.PitcherTeams[:6]
-        self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", PitcherTeam_show, default=PitcherTeam_show)
+        self.PitcherTeam = st.multiselect("PitcherTeam", PitcherTeam_show, default=PitcherTeam_show)
 
-        self.LR_list = self.wid_cols[1].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
+        self.LR_list = st.multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
 
     def show_table(self):
         df_show = self.db[self.db['PitcherTeam'].isin(self.PitcherTeam)]
         df_show = df_show[df_show['PitcherThrows'].isin(self.LR_list)]
 
-        st.dataframe(data=df_show[self.col_table], width=8000, height=300)
+        comment = f"num-player = {df_show.shape[0]}"
+        st.write(comment)
+
+        st.dataframe(data=df_show[self.col_table], width=8000, height=600)
 
 
 if __name__ == '__main__':
@@ -135,3 +137,4 @@ if __name__ == '__main__':
     self.get_csv()
     self.chose_pitcher_team()
     self.show_table()
+
