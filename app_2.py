@@ -26,6 +26,19 @@ class StreamlitTM:
         # setting streamlit
         st.set_page_config(layout="wide")
         st.title("TrackMan DataBase")
+
+        # comment
+        with st.beta_expander("See explanation"):
+            st.write("STR: StrikeCalled + StrikeSwinging + FoulBall + InPlay")
+            st.write("STR%: STR / NUM(pt)")
+            st.write("MISS%: StrikeSwinging / STR")
+            st.write("IVB: Induced Vertical Break (縦変化量) [cm]")
+            st.write("HB: Horizontal Break (横変化量) [cm]")
+            st.write("RelH: Release Side [cm]")
+            st.write("RelS: Release Height [cm]")
+            st.write("Ext: Extension [cm]")
+
+        # set widgets
         self.wid_cols = st.beta_columns(3)
 
         # parameters
@@ -60,16 +73,6 @@ class StreamlitTM:
                        }  # 'Undefined', '#eeeeee', "h"],
         self.pt_list = list(self.dic_pt.keys())[:-2]
 
-        # comment
-        with st.beta_expander("See explanation"):
-            st.write("STR: StrikeCalled + StrikeSwinging + FoulBall + InPlay")
-            st.write("STR%: STR / NUM(pt)")
-            st.write("MISS%: StrikeSwinging / STR")
-            st.write("IVB: Induced Vertical Break (縦変化量) [cm]")
-            st.write("HB: Horizontal Break (横変化量) [cm]")
-            st.write("RelH: Release Side [cm]")
-            st.write("RelS: Release Height [cm]")
-            st.write("Ext: Extension [cm]")
 
     def get_csv(self):
         # read data
