@@ -51,39 +51,41 @@ class StreamlitTM:
         self.ll.index = self.ll["NPB選手ID"]
         self.ll["nameTM"] = np.nan
 
-        path_db = 'templates/TM_info_all_inning_ver5.csv'
-
         self.col_info = [
             'PitcherId',
             'PitcherThrows',
             'PitcherTeam',
             'Pitcher',
-            'Inning',
-            'Date',
+            # 'Inning',
+            # 'Date',
 
-            'チーム',
-            '選手',
+            # 'チーム',
+            # '選手',
             '背番号#',
-            'pos1',
-            'pos2',
+            # 'pos1',
+            # 'pos2',
         ]
-        self.col_table = [
-            'num_pit',
-            'num_fb',
+        self.dic_table = {
+            'num_pit': "NUM",
+            'num_fb': "NUM(FB)",
 
-            'spdP_ave',
-            'SpinRate_ave',
-            'pitY_ave',
-            'pitX_ave',
-            'SpinAxis_ave',
+            'rate_fb': "MiSS%",
+            'strike%_fb': "MiSS%",
+            'miss%_fb': "MiSS%",
+
+            'spdP_ave': "SPD",
+            'SpinRate_ave': "SPIN",
+            'pitY_ave': "IVB",
+            'pitX_ave': "HB",
+            # 'SpinAxis_ave': "MiSS%",
             # 'relX_ave',
             # 'relY_ave',
             # 'relZ_ave',
 
-            'spdP_max',
-            'SpinRate_max',
-            'pitY_max',
-            'pitX_max',
+            'spdP_max': "SPD(MAX)",
+            'SpinRate_max': "SPIN(MAX)",
+            'pitY_max': "IVB(MAX)",
+            'pitX_max': "HB(MAX)",
             # 'SpinAxis_max',
             # 'relX_max',
             # 'relY_max',
@@ -97,14 +99,15 @@ class StreamlitTM:
             # 'relX_std',
             # 'relY_std',
             # 'relZ_std',
+        }
+        self.col_table_JP = list(self.dic_table.keys())
+        self.col_table_JP = list(self.dic_table.values())
 
-            'rate_fb',
-            'strike%_fb',
-            'miss%_fb',
-        ]
-        self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table)
+        path_db = 'templates/TM_info_all_inning_ver5.csv'
+        self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_JP)
         self.db = self.db[self.db["Inning"] == "all"]
         self.db.index = self.db["背番号#"] + " " + [v.split(' ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
+        self.db.columns = self.col_table_JP
         self.PitcherTeams = list(self.dic_team.keys())
 
         """
@@ -129,7 +132,7 @@ class StreamlitTM:
         comment = f"num-player = {df_show.shape[0]}"
         st.write(comment)
 
-        st.dataframe(data=df_show[self.col_table], width=8000, height=450)
+        st.dataframe(data=df_show[self.col_table_JP], width=8000, height=450)
 
 
 if __name__ == '__main__':
