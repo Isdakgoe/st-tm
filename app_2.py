@@ -74,7 +74,7 @@ class StreamlitTM:
             # 'Inning',
             # 'Date',
 
-            # 'チーム',
+            'チーム',
             # '選手',
             '背番号#',
             # 'pos1',
@@ -141,14 +141,15 @@ class StreamlitTM:
         """
 
     def chose_pitcher_team(self):
-        self.PitcherTeam = st.multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
+        self.PitcherTeamEN = st.multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
+        self.PitcherTeamJP = [self.dic_team[v] for v in self.PitcherTeamEN]
 
         self.LR_chosen = self.wid_cols[0].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
 
         self.pt_chosen = self.wid_cols[1].multiselect("TaggedPitchType", self.pt_list, default=self.pt_list[0])
 
     def show_table(self):
-        df_show = self.db[self.db['PitcherTeam'].isin(self.PitcherTeam)]
+        df_show = self.db[self.db['チーム'].isin(self.PitcherTeamJP)]
         df_show = df_show[df_show['PitcherThrows'].isin(self.LR_chosen)]
         df_show = df_show[df_show['pt'].isin(self.pt_chosen)]
 
