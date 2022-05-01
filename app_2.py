@@ -136,11 +136,11 @@ class StreamlitTM:
         """
 
     def chose_pitcher_team(self):
-        self.PitcherTeam = st.multiselect("PitcherTeam", self.PitcherTeams[:6], default=self.PitcherTeams[:6])
+        self.PitcherTeam = self.wid_cols[0].multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
 
-        self.LR_chosen = st.multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
+        self.LR_chosen = self.wid_cols[1].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
 
-        self.pt_chosen = st.multiselect("TaggedPitchType", self.pt_list, default=self.pt_list)
+        self.pt_chosen = self.wid_cols[2].multiselect("TaggedPitchType", self.pt_list, default=self.pt_list[0])
 
     def show_table(self):
         df_show = self.db[self.db['PitcherTeam'].isin(self.PitcherTeam)]
