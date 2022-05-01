@@ -169,6 +169,8 @@ class StreamlitTM:
 
         self.pt_chosen = self.wid_cols[2].multiselect("TaggedPitchType", self.pt_list, default=self.pt_list[0])
 
+        self.col_show = st.multiselect("Columns which shows at table below", self.col_table_JP, default=self.col_table_JP)
+
     def show_table(self):
         df_show = self.db[self.db['チーム'].isin(self.PitcherTeamJP)]
         df_show = df_show[df_show['LR'].isin(self.LR_chosen)]
@@ -177,7 +179,7 @@ class StreamlitTM:
         comment = f"{df_show.shape[0]} data is at table below"
         st.write(comment)
 
-        st.dataframe(data=df_show[self.col_table_JP], width=8000, height=450)
+        st.dataframe(data=df_show[self.col_show], width=12000, height=450)
 
 
 if __name__ == '__main__':
