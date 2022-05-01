@@ -105,7 +105,7 @@ class StreamlitTM:
         path_db = 'templates/TM_info_all_inning_ver5.csv'
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
         self.db = self.db[self.db["Inning"] == "all"]
-        self.db.index = self.db["背番号#"] + " " + [v.split(' ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
+        self.db.index = self.db["背番号#"] + " " + [v.split(', ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
         self.db.columns = self.col_info + self.col_table_JP
         self.PitcherTeams = list(self.dic_team.keys())
 
