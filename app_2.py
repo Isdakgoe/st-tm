@@ -26,7 +26,7 @@ class StreamlitTM:
         # setting streamlit
         st.set_page_config(layout="wide")
         st.title("TrackMan DataBase")
-        self.wid_cols = st.beta_columns(4)
+        self.wid_cols = st.beta_columns(3)
 
         # parameters
         self.dic_team = {
@@ -159,12 +159,12 @@ class StreamlitTM:
         """
 
     def chose_pitcher_team(self):
-        self.PitcherTeamEN = st.multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
+        self.PitcherTeamEN = self.wid_cols[0].multiselect("PitcherTeam", self.PitcherTeams[:6], default=["TOH_GOL"])
         self.PitcherTeamJP = [self.dic_team[v] for v in self.PitcherTeamEN]
 
-        self.LR_chosen = self.wid_cols[0].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
+        self.LR_chosen = self.wid_cols[1].multiselect("PitcherThrows", ["Left", "Right"], default=["Left", "Right"])
 
-        self.pt_chosen = self.wid_cols[1].multiselect("TaggedPitchType", self.pt_list, default=self.pt_list[0])
+        self.pt_chosen = self.wid_cols[2].multiselect("TaggedPitchType", self.pt_list, default=self.pt_list[0])
 
     def show_table(self):
         df_show = self.db[self.db['チーム'].isin(self.PitcherTeamJP)]
