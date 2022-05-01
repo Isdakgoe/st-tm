@@ -129,7 +129,7 @@ class StreamlitTM:
         comment = f"num-player = {df_show.shape[0]}"
         st.write(comment)
 
-        st.dataframe(data=df_show[self.col_table], width=8000, height=600)
+        st.dataframe(data=df_show[self.col_table], width=8000, height=300)
 
 
 if __name__ == '__main__':
