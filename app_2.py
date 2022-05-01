@@ -89,7 +89,7 @@ class StreamlitTM:
         self.db.index = list(range(self.db.shape[0]))
         # for v in self.db.columns:
         #     print(f"'{v}', ")
-        st.dataframe(self.db[["Pitcher"]+self.col_table].style.highlight_max(axis=0))
+        st.dataframe(self.db[self.col_table].style.highlight_max(axis=0))
 
         # values
         self.dic_team = {
