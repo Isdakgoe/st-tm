@@ -24,9 +24,11 @@ def git_setting():
 class StreamlitTM:
     def __init__(self):
         # setting streamlit
+        st.set_page_config(layout="wide")
         st.title("TrackMan DataBase")
         self.wid_cols = st.beta_columns(4)
 
+    def get_csv(self):
         # read data
         self.ll = pd.read_csv('templates/long_list_tm.csv', encoding="utf_8_sig")
         self.ll.index = self.ll["NPB選手ID"]
@@ -110,6 +112,5 @@ class StreamlitTM:
 
 
 if __name__ == '__main__':
-    st.set_page_config(layout="wide")
     self = StreamlitTM()
-
+    self.get_csv()
