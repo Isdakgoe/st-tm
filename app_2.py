@@ -67,11 +67,15 @@ class StreamlitTM:
 
         # start
         page_list = ["Pitcher-Summary", "Batter-Summary"]
-        self.page = st.sidebar.radio("Page", page_list, index=1)
+        self.page = st.sidebar.radio("Page for display", page_list, index=0)
         if self.page == page_list[0]:
             self.page_PS()
         else:
-            st.error("NON PAGE")
+            self.page_BS()
+
+    # BS: Batter Summary
+    def page_BS(self):
+        st.error("NON PAGE")
 
     # PS: Pitcher Summary
     def page_PS(self):
