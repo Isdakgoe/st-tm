@@ -122,9 +122,7 @@ class StreamlitTM:
         st.dataframe(df_show[self.col_table].style.highlight_max(axis=0), 1000, 1000)
 
 
-
-
-
 if __name__ == '__main__':
     self = StreamlitTM()
     self.get_csv()
+    self.chose_pitcher_team()
