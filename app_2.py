@@ -134,3 +134,4 @@ if __name__ == '__main__':
     self = StreamlitTM()
     self.get_csv()
     self.chose_pitcher_team()
+    self.show_table()
