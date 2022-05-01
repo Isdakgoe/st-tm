@@ -106,7 +106,7 @@ class StreamlitTM:
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=self.col_info+self.col_table_EN)
         self.db = self.db[self.db["Inning"] == "all"]
         self.db.index = self.db["背番号#"] + " " + [v.split(', ')[0] for v in self.db["Pitcher"]]   # list(range(self.db.shape[0]))
-        self.db.columns = self.col_info + self.col_table_JP
+        self.db.rename(columns=self.dic_table, inplace=True)
         self.PitcherTeams = list(self.dic_team.keys())
 
         """
