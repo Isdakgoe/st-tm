@@ -88,16 +88,16 @@ class StreamlitTM:
             'str%': "STR%",
             'miss%': "MiSS%",
 
+            'relX_ave': 'RelH',
+            'relY_ave': 'RelS',
+            'relZ_ave': 'Ext',
+
             'spdP_ave': "SPD",
             'SpinRate_ave': "SPIN",
             'pitY_ave': "IVB",
             'pitX_ave': "HB",
 
             # 'SpinAxis_ave': "MiSS%",
-
-            'relX_ave': 'RelH',
-            'relY_ave': 'RelS',
-            'relZ_ave': 'Ext',
 
             # 'spdP_max': "SPD\n(MAX)",
             # 'SpinRate_max': "SPIN\n(MAX)",
@@ -127,8 +127,8 @@ class StreamlitTM:
 
         v_replace = 100000
         self.db.fillna(v_replace, inplace=True)
-        self.db.loc[:, self.col_table_EN[2:5]] = (self.db.loc[:, self.col_table_EN[2:5]] * 100).astype(int)
-        self.db.loc[:, self.col_table_EN[5:]] = (self.db.loc[:, self.col_table_EN[5:]]).astype(int)
+        self.db.loc[:, self.col_table_EN[2:8]] = (self.db.loc[:, self.col_table_EN[2:5]] * 100).astype(int)
+        self.db.loc[:, self.col_table_EN[8:]] = (self.db.loc[:, self.col_table_EN[5:]]).astype(int)
         self.db.replace({v_replace: np.nan, v_replace*100: np.nan}, inplace=True)
 
         self.db.rename(columns=self.dic_table, inplace=True)
