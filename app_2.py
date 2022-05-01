@@ -87,7 +87,7 @@ class StreamlitTM:
         self.db.index = list(range(self.db.shape[0]))
         # for v in self.db.columns:
         #     print(f"'{v}', ")
-        st.dataframe(self.db_show[self.col_table])
+        st.dataframe(self.db[self.col_table])
 
         # values
         self.dic_team = {
@@ -108,48 +108,8 @@ class StreamlitTM:
         self.teamEN_list = list(self.dic_team.keys())
         self.Pitchers = sorted(set(self.db["Pitcher"]))
 
-    def _chose_player(self, w_n, bp):
-        teamEN = self.wid_cols[w_n].selectbox(f"{bp}Team", ['all']+self.teamEN_list, index=0)
-        if teamEN == "all":
-            Player = "all"
-            self.Batter = "all"
-        else:
-            Player = self.wid_cols[w_n+1].selectbox(bp, ["all"]+self.dic_bp_EN[bp][teamEN], index=0)
-        return teamEN, Player
-
-    def chose_extract_pitcher(self):
-        self.Pitcher = self.wid_cols[0].selectbox("Pitcher", ["all"] + self.Pitchers, index=1)
-        # self.PitcherTeam, self.Pitcher = self._chose_player(w_n=0, bp="Pitcher")
-
-    def search_rule(self):
-        if self.Pitcher == self.Batter == "all":
-            st.error('Pitcher and Batter are "all", and please change either one')
-            return False
-
-        else:
-            if self.Pitcher == "all":
-                self.db_show = self.db[self.db["Batter"] == self.Batter]
-
-            elif self.Batter == "all":
-                self.db_show = self.db[self.db["Pitcher"] == self.Pitcher]
-
-            else:
-                self.db_show = self.db[(self.db["Pitcher"] == self.Pitcher) & (self.db["Batter"] == self.Batter)]
-
-            num = str(self.db_show.shape[0])
-            st.write(f"num of pitch = {num}")
-            return True
-
-    def fnc_show_table(self):
-        st.dataframe(self.db_show[self.col_table])
-
 
 if __name__ == '__main__':
     st.set_page_config(layout="wide")
     self = StreamlitTM()
-    # self.chose_extract_pitcher()
 
-    # self.chose_extract_pitcher()
-
-    # self.btn_table_show = st.button("Show")
-    # self.fnc_show_table()
