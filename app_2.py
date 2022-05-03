@@ -21,6 +21,13 @@ def git_setting():
     """
 
 
+class Temp:
+    def __init__(self):
+        print("A")
+
+self = Temp()
+
+
 class StreamlitTM:
     def __init__(self):
         # setting streamlit
@@ -186,19 +193,19 @@ class StreamlitTM:
         # self.db["Pitcher"] = [v.split(', ')[0] for v in self.db["Pitcher"]]
         # self.db.index = [f"[" + v.split('_')[0] + "] " for v in self.db["PitcherTeam"]] \
         #                 + self.db["背番号#"] + " " + self.db["Pitcher"]
-        self.db.index = self.db["Pitcher"]
 
         # int or float or replace 0
         v_replace = 100000
         self.db.fillna(v_replace, inplace=True)
-        col_per = ['pt_rate', 'str%', 'miss%', 'pt_rate', 'relX_ave', 'relY_ave', 'relZ_ave']
+        col_per = ['pt_rate', 'str%', 'miss%', 'relX_ave', 'relY_ave', 'relZ_ave']
         self.db.loc[:, col_per] = (self.db.loc[:, col_per] * 100).astype(int)
 
         col_int = ['spdP_ave', 'SpinRate_ave', 'pitY_ave', 'pitX_ave',]
-        self.db.loc[:, col_per] = (self.db.loc[:, col_int]).astype(int)
+        self.db.loc[:, col_int] = (self.db.loc[:, col_int]).astype(int)
 
         self.db.replace({v_replace: np.nan, v_replace*100: np.nan}, inplace=True)
         self.db.rename(columns=self.dic_table, inplace=True)
+        self.db.index = self.db["Pitcher"]
 
         """
         for v in self.db.columns:
@@ -227,4 +234,4 @@ class StreamlitTM:
 if __name__ == '__main__':
     self = StreamlitTM()
 
-
+# streamlit run app_2.py
