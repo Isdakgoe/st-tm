@@ -73,6 +73,25 @@ class StreamlitTM:
         else:
             self.page_BS()
 
+    # logion
+    def page_login(self):
+        username = st.sidebar.text_input("User")
+        password = st.sidebar.text_input("Password", type='password')
+        if st.sidebar.checkbox("ログイン"):
+            self.create_user()
+            hashed_pswd = make_hashes(password)
+
+            result = login_user(username, check_hashes(password, hashed_pswd))
+            if result:
+                st.success("{}さんでログインしました".format(username))
+
+            else:
+                st.warning("ユーザー名かパスワードが間違っています")
+
+    def create_user(self):
+        self.c.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT,password TEXT)')
+
+
     # BS: Batter Summary
     def page_BS(self):
         st.error("NON PAGE")
@@ -117,10 +136,10 @@ class StreamlitTM:
             # 'pos2',
         ]
         self.dic_table = {
-            'PitcherThrows': "LR",
-            'PitcherTeam': "Team",
-            '背番号#': "#",
-            'Pitcher': "Pitcher",
+            # 'PitcherThrows': "LR",
+            # 'PitcherTeam': "Team",
+            # '背番号#': "#",
+            # 'Pitcher': "Pitcher",
             'pt': 'pt',
 
             'num_all': "NUM",
@@ -168,6 +187,7 @@ class StreamlitTM:
         # self.db["Pitcher"] = [v.split(', ')[0] for v in self.db["Pitcher"]]
         # self.db.index = [f"[" + v.split('_')[0] + "] " for v in self.db["PitcherTeam"]] \
         #                 + self.db["背番号#"] + " " + self.db["Pitcher"]
+        self.db.index = self.db["Pitcher"]
 
         v_replace = 100000
         self.db.fillna(v_replace, inplace=True)
