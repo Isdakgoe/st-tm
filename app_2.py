@@ -91,7 +91,6 @@ class StreamlitTM:
     def create_user(self):
         self.c.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT,password TEXT)')
 
-
     # BS: Batter Summary
     def page_BS(self):
         st.error("NON PAGE")
@@ -212,7 +211,7 @@ class StreamlitTM:
 
     def show_table_PS(self):
         df_show = self.db[self.db['チーム'].isin(self.PitcherTeamJP)]
-        df_show = df_show[df_show['LR'].isin(self.LR_chosen)]
+        df_show = df_show[df_show['PitcherThrows'].isin(self.LR_chosen)]
         df_show = df_show[df_show['pt'].isin(self.pt_chosen)]
 
         comment = f"{df_show.shape[0]} data is at table below"

@@ -79,14 +79,7 @@ class StreamlitTM:
 
         path_db = 'templates/tm_2022_db_3.csv'
         usecols = self.col_table + ["PitcherId", "PitcherTeam", "Pitcher"] + ["BatterId", "BatterTeam", "Batter"]
-
         self.db = pd.read_csv(path_db, encoding="utf-8-sig", usecols=usecols, dtype={"RelSide": float})
-        for v in self.db.columns:
-            dtype = self.db[v].dtype
-            print(v, dtype) #  if str(dtype) == "object" else None
-
-        for v in sorted(set(self.db["Date"])):
-            print(v)
 
         # values
         self.dic_team = {
