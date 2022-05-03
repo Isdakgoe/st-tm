@@ -188,11 +188,15 @@ class StreamlitTM:
         #                 + self.db["背番号#"] + " " + self.db["Pitcher"]
         self.db.index = self.db["Pitcher"]
 
+        # int or float or replace 0
         v_replace = 100000
         self.db.fillna(v_replace, inplace=True)
-        self.db.loc[:, self.col_table_EN[7:10]] = (self.db.loc[:, self.col_table_EN[7:10]] * 100).astype(int)
-        self.db.loc[:, self.col_table_EN[10:14]] = (self.db.loc[:, self.col_table_EN[10:14]]).astype(int)
-        self.db.loc[:, self.col_table_EN[14:]] = (self.db.loc[:, self.col_table_EN[14:]] * 100).astype(int)
+        col_per = ['pt_rate', 'str%', 'miss%', 'pt_rate', 'relX_ave', 'relY_ave', 'relZ_ave']
+        self.db.loc[:, col_per] = (self.db.loc[:, col_per] * 100).astype(int)
+
+        col_int = ['spdP_ave', 'SpinRate_ave', 'pitY_ave', 'pitX_ave',]
+        self.db.loc[:, col_per] = (self.db.loc[:, col_int]).astype(int)
+
         self.db.replace({v_replace: np.nan, v_replace*100: np.nan}, inplace=True)
         self.db.rename(columns=self.dic_table, inplace=True)
 
